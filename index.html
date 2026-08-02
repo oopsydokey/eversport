@@ -159,7 +159,12 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
   .signup{
     display:flex; gap:10px; max-width:460px;
   }
-  .signup input[type=email]{
+  .signup input[type=email],
+  .survey input[type=text],
+  .survey input[type=tel],
+  .survey input[type=number],
+  .survey select,
+  .survey textarea{
     flex:1;
     font-family:var(--body);
     font-size:16px;
@@ -170,9 +175,15 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
     color:var(--pitch);
     min-width:0;
   }
-  .signup input[type=email]::placeholder{color:#8B917F;}
-  .signup input[type=email]:focus-visible{outline:3px solid var(--card-yellow); outline-offset:1px;}
-  .signup button{
+  .signup input[type=email]::placeholder,
+  .survey input::placeholder,
+  .survey textarea::placeholder{color:#8B917F;}
+  .signup input[type=email]:focus-visible,
+  .survey input:focus-visible,
+  .survey select:focus-visible,
+  .survey textarea:focus-visible{outline:3px solid var(--card-yellow); outline-offset:1px;}
+  .signup button,
+  .survey-submit{
     font-family:var(--display);
     font-weight:700;
     text-transform:uppercase;
@@ -187,9 +198,10 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
     transition:transform .1s, background .15s;
     white-space:nowrap;
   }
-  .signup button:hover{background:var(--grass-deep);}
-  .signup button:active{transform:translateY(1px);}
-  .signup button:focus-visible{outline:3px solid var(--card-yellow); outline-offset:2px;}
+  .signup button:hover, .survey-submit:hover{background:var(--grass-deep);}
+  .signup button:active, .survey-submit:active{transform:translateY(1px);}
+  .signup button:focus-visible,
+  .survey-submit:focus-visible{outline:3px solid var(--card-yellow); outline-offset:2px;}
   .form-note{
     font-family:var(--mono);
     font-size:12px;
@@ -206,6 +218,142 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
     font-size:20px;
     color:var(--grass-deep);
     padding:14px 0;
+  }
+
+  /* ---------- lead qualification survey ---------- */
+  .survey{
+    display:none;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:24px 22px 26px;
+    margin-top:18px;
+    max-width:640px;
+    text-align:left;               /* .cta-final centers its children */
+  }
+  .survey.is-open{display:block;}
+  .cta-final .survey{margin-left:auto; margin-right:auto;}
+  .survey-head{margin-bottom:20px;}
+  .survey-head h3{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:22px;
+    letter-spacing:.02em;
+    margin-bottom:4px;
+    outline:none;
+  }
+  .survey-head p{font-size:15px; color:var(--pitch-soft);}
+  .survey-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+  }
+  .survey-field{display:flex; flex-direction:column; gap:7px; min-width:0;}
+  .survey-field.span2{grid-column:1/-1;}
+  .survey-label, .survey fieldset legend{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+  }
+  .survey fieldset{border:0; display:flex; flex-direction:column; gap:7px;}
+  /* the shared rule above sets flex:1 for the horizontal .signup row — inside the
+     survey's column layout that would stretch controls to fill the grid row */
+  .survey input, .survey select, .survey textarea{flex:0 0 auto;}
+  .survey textarea{resize:vertical; min-height:84px; line-height:1.45;}
+  .survey select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2310371F' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 15px center;
+    background-size:12px;
+    padding-right:40px;
+    cursor:pointer;
+  }
+  .survey-hint{
+    font-family:var(--mono);
+    font-size:11px;
+    line-height:1.45;
+    color:var(--pitch-soft);
+    letter-spacing:.02em;
+  }
+  /* radio + checkbox chips */
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    font-size:14.5px;
+    line-height:1.2;
+    padding:9px 14px;
+    border:2px solid var(--line);
+    border-radius:999px;
+    cursor:pointer;
+    transition:border-color .12s, background .12s, color .12s;
+  }
+  .chip input{
+    position:absolute;
+    opacity:0;
+    width:100%; height:100%;
+    left:0; top:0;
+    margin:0;
+    cursor:pointer;
+  }
+  .chip:hover{border-color:var(--pitch-soft);}
+  .chip:has(input:checked){
+    background:var(--grass);
+    border-color:var(--grass-deep);
+    color:var(--white);
+  }
+  .chip:has(input:focus-visible){outline:3px solid var(--card-yellow); outline-offset:2px;}
+  /* fallback for browsers without :has() — keeps the control usable, just unstyled */
+  @supports not selector(:has(*)){
+    .chip input{position:static; opacity:1; width:auto; height:auto; margin-right:8px;}
+  }
+  .survey-check{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .survey-check input{
+    width:20px; height:20px;
+    margin:0;
+    flex:0 0 auto;
+    accent-color:var(--grass);
+    cursor:pointer;
+  }
+  .survey-actions{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-top:22px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+  }
+  .survey-skip{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--pitch-soft);
+    background:none;
+    border:0;
+    padding:4px 2px;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .survey-skip:hover{color:var(--pitch);}
+  .survey-skip:focus-visible{outline:3px solid var(--card-yellow); outline-offset:2px;}
+  .hero-grid.survey-open{align-items:start;}
+  @media (max-width:640px){
+    .survey-grid{grid-template-columns:1fr;}
+    .survey-actions{flex-direction:column; align-items:stretch; gap:12px;}
+    .survey-submit{width:100%;}
   }
 
   /* ---------- phone / SMS thread ---------- */
@@ -433,6 +581,7 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
   }
   .foot{
     display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px 20px;
     font-family:var(--mono);
     font-size:12px;
     letter-spacing:.06em;
@@ -440,6 +589,15 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
   }
   .foot-brand{display:inline-flex; align-items:center; gap:9px;}
   .foot-brand img{width:18px; height:18px; border-radius:3px; display:block;}
+  .foot-legal{display:inline-flex; align-items:center; gap:18px;}
+  .foot-legal a{
+    text-decoration:underline;
+    text-underline-offset:3px;
+    text-decoration-color:var(--line);
+    transition:color .15s, text-decoration-color .15s;
+  }
+  .foot-legal a:hover{color:var(--pitch); text-decoration-color:var(--pitch);}
+  .foot-legal a:focus-visible{outline:3px solid var(--card-yellow); outline-offset:3px; border-radius:2px;}
 
   /* ---------- responsive ---------- */
   @media (max-width:880px){
@@ -586,9 +744,160 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
       <img src="assets/eversport-mark-green.svg" alt="" aria-hidden="true" width="18" height="18">
       EVERSPORT.COM
     </span>
-    <span>© 2026 Eversport</span>
+    <span class="foot-legal">
+      <a href="privacy.html">Privacy</a>
+      <span>© 2026 Eversport</span>
+    </span>
   </div>
 </footer>
+
+<!--
+  Lead qualification survey. Authored once here and moved into place by JS after
+  either signup form is submitted, so there is only one copy of these fields and
+  only one set of IDs. Every field is optional — the email was the conversion.
+-->
+<div id="survey-block">
+  <form id="lead-survey" class="survey" novalidate>
+    <div class="survey-head">
+      <h3 id="survey-heading" tabindex="-1">Tell us about your crew</h3>
+      <p>All optional, and it decides which cities we open first.</p>
+    </div>
+
+    <div class="survey-grid">
+      <div class="survey-field">
+        <label class="survey-label" for="sv-city">City</label>
+        <input type="text" id="sv-city" name="city" placeholder="Nashville, TN" autocomplete="address-level2">
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-sport">Sport</label>
+        <select id="sv-sport" name="sport">
+          <option value="Soccer" selected>Soccer</option>
+          <option value="Basketball">Basketball</option>
+          <option value="Football">Football (flag / touch)</option>
+          <option value="Volleyball">Volleyball</option>
+          <option value="Hockey">Hockey</option>
+          <option value="Ultimate">Ultimate</option>
+          <option value="Tennis / pickleball">Tennis / pickleball</option>
+          <option value="Other">Something else</option>
+        </select>
+      </div>
+
+      <div class="survey-field span2">
+        <fieldset>
+          <legend>Your game</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="game_status" value="Existing game"> We already play</label>
+            <label class="chip"><input type="radio" name="game_status" value="New game"> Starting something new</label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-organizer">Who organizes it</label>
+        <select id="sv-organizer" name="organizer_role">
+          <option value="">—</option>
+          <option value="I organize">I do</option>
+          <option value="Someone else organizes">Someone else does</option>
+          <option value="We take turns">We take turns</option>
+          <option value="Nobody / ad hoc">Nobody — it's ad hoc</option>
+        </select>
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-frequency">How often you play</label>
+        <select id="sv-frequency" name="play_frequency">
+          <option value="">—</option>
+          <option value="Weekly">Weekly</option>
+          <option value="2-3x per week">2–3× a week</option>
+          <option value="Every other week">Every other week</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Irregular">Whenever it comes together</option>
+        </select>
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-roster">People on your list</label>
+        <input type="number" id="sv-roster" name="roster_size" min="0" max="500" step="1" inputmode="numeric" placeholder="24">
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-needed">Minimum to play</label>
+        <input type="number" id="sv-needed" name="players_needed" min="0" max="100" step="1" inputmode="numeric" placeholder="10">
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-pitch">Where you play</label>
+        <select id="sv-pitch" name="has_home_pitch">
+          <option value="">—</option>
+          <option value="Same place every time">Same place every time</option>
+          <option value="Usually same, sometimes moves">Usually the same, sometimes moves</option>
+          <option value="No fixed field">No — we hunt for a field</option>
+          <option value="We book and pay">We book and pay for one</option>
+        </select>
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-daytime">Day &amp; time</label>
+        <input type="text" id="sv-daytime" name="game_day_time" placeholder="Saturdays 9am">
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-fallthrough">How often it falls apart</label>
+        <select id="sv-fallthrough" name="game_falls_through">
+          <option value="">—</option>
+          <option value="Never">Never — we always get numbers</option>
+          <option value="Once in a while">Once in a while</option>
+          <option value="Monthly">About once a month</option>
+          <option value="Most weeks a scramble">Most weeks it's a scramble</option>
+          <option value="Often">Often — games die on us</option>
+        </select>
+      </div>
+
+      <div class="survey-field">
+        <label class="survey-label" for="sv-phone">Mobile number</label>
+        <input type="tel" id="sv-phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="(615) 555-0134" aria-describedby="sv-phone-hint">
+        <p class="survey-hint" id="sv-phone-hint">Optional. We'll only text you about your beta invite. Reply STOP any time.</p>
+      </div>
+
+      <div class="survey-field span2">
+        <fieldset>
+          <legend>How you coordinate today</legend>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="current_tools" value="WhatsApp"> WhatsApp</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Group text"> Group text</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="GroupMe"> GroupMe</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Signal / Telegram"> Signal / Telegram</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Facebook"> Facebook</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Discord"> Discord</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Spreadsheet or app"> Spreadsheet or app</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Word of mouth"> Word of mouth</label>
+            <label class="chip"><input type="checkbox" name="current_tools" value="Nothing yet"> Nothing yet</label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="survey-field span2">
+        <label class="survey-label" for="sv-notes">Anything else</label>
+        <textarea id="sv-notes" name="survey_notes" rows="3" placeholder="What makes your game work — or what keeps killing it?"></textarea>
+      </div>
+
+      <div class="survey-field span2">
+        <label class="survey-check">
+          <input type="checkbox" id="sv-call" name="open_to_call" value="yes">
+          <span>I'd do a 15-minute call about how our games run.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="survey-actions">
+      <button type="submit" class="survey-submit">Send it</button>
+      <button type="button" class="survey-skip" id="survey-skip">Skip this</button>
+    </div>
+  </form>
+
+  <p class="confirm" id="survey-thanks" aria-live="polite">✓ Got it — that helps a ton.</p>
+</div>
 
 <script>
   // Lightweight form handling.
@@ -619,8 +928,103 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
       track('Beta Signup Completed', {form_location: location});
       form.style.display = 'none';
       confirm.style.display = 'block';
+      openSurvey(confirm, location);
     });
   }
+
+  /* ---------- lead qualification survey ---------- */
+  // There is exactly one survey in the DOM. Rather than rendering a second copy for
+  // the footer form, we relocate the live element to whichever confirmation fired —
+  // that keeps IDs unique and preserves anything already typed.
+  var surveyBlock = document.getElementById('survey-block');
+  var surveyForm = document.getElementById('lead-survey');
+  var surveyThanks = document.getElementById('survey-thanks');
+  var surveyLocation = null;
+  var surveyStarted = false;
+
+  function openSurvey(afterEl, location){
+    if(!surveyBlock || !surveyForm) return;
+    surveyLocation = location;
+    afterEl.parentNode.insertBefore(surveyBlock, afterEl.nextSibling);
+
+    // A tall survey in the hero's left column would strand the phone mockup,
+    // which is vertically centred against it.
+    var heroGrid = surveyBlock.closest('.hero-grid');
+    if(heroGrid) heroGrid.classList.add('survey-open');
+
+    surveyForm.classList.add('is-open');
+    surveyThanks.style.display = 'none';
+    track('Lead Survey Shown', {form_location: location});
+
+    var heading = document.getElementById('survey-heading');
+    if(heading){
+      heading.focus({preventScroll: true});
+      heading.scrollIntoView({block: 'nearest'});
+    }
+  }
+
+  function closeSurvey(showThanks){
+    surveyForm.classList.remove('is-open');
+    if(showThanks) surveyThanks.style.display = 'block';
+    var heroGrid = surveyBlock.closest('.hero-grid');
+    if(heroGrid) heroGrid.classList.remove('survey-open');
+  }
+
+  if(surveyForm){
+    // One-shot: lets us measure how many people start the survey but abandon it.
+    surveyForm.addEventListener('input', function(){
+      if(surveyStarted) return;
+      surveyStarted = true;
+      track('Lead Survey Started', {form_location: surveyLocation});
+    }, true);
+
+    document.getElementById('survey-skip').addEventListener('click', function(){
+      track('Lead Survey Skipped', {form_location: surveyLocation});
+      closeSurvey(false);
+    });
+
+    surveyForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var data = new FormData(surveyForm);
+      var props = {};
+
+      // Only send answers that were actually given, so profiles don't fill with
+      // empty strings that are then impossible to filter on.
+      ['city','sport','game_status','organizer_role','play_frequency',
+       'has_home_pitch','game_day_time','game_falls_through','survey_notes'
+      ].forEach(function(key){
+        var val = (data.get(key) || '').trim();
+        if(val) props[key] = val;
+      });
+
+      // Numbers, so Mixpanel can average them across the list.
+      ['roster_size','players_needed'].forEach(function(key){
+        var num = parseInt(data.get(key), 10);
+        if(isFinite(num)) props[key] = num;
+      });
+
+      var tools = data.getAll('current_tools');
+      if(tools.length) props.current_tools = tools;
+
+      props.open_to_call = data.get('open_to_call') === 'yes';
+
+      var phone = (data.get('phone') || '').trim();
+
+      try{
+        var profile = {};
+        for(var k in props){ if(props.hasOwnProperty(k)) profile[k] = props[k]; }
+        // $phone is Mixpanel's reserved property, alongside the $email set at signup.
+        if(phone) profile['$phone'] = phone;
+        mixpanel.people.set(profile);
+      }catch(err){}
+
+      props.gave_phone = !!phone;   // track that they shared it, not the number itself
+      props.form_location = surveyLocation;
+      track('Lead Survey Completed', props);
+      closeSurvey(true);
+    });
+  }
+
   wireForm('signup','confirm','hero');
   wireForm('signup2','confirm2','footer');
 

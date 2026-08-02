@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!--
+  DRAFT — review before publishing.
+
+  Placeholders to fill in (search for "[" ):
+    [YOUR CONTACT EMAIL]   — appears twice: Your choices, and Contact
+    [YOUR LEGAL ENTITY]    — company/individual name in Contact
+    [YOUR MAILING ADDRESS] — optional, but expected under CCPA/GDPR
+
+  This describes what index.html actually does today: two email forms, an optional
+  phone field, the lead survey, Mixpanel analytics, and Google Fonts. If you add a
+  form endpoint, an email tool, or an SMS provider, this needs updating.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy — Eversport</title>
+<meta name="description" content="What Eversport collects, why, and how to get it deleted.">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="assets/eversport-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/eversport-favicon-256.png" sizes="256x256" type="image/png">
+<link rel="apple-touch-icon" href="assets/eversport-mark-green.png">
+<meta name="theme-color" content="#10371F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --chalk:#F7F6F1;
+    --line:#DFDBCD;
+    --pitch:#10371F;
+    --pitch-soft:#3D5A47;
+    --grass:#1E9E50;
+    --grass-deep:#157A3C;
+    --white:#FFFFFF;
+    --display:"Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+    --body:"Barlow", ui-sans-serif, system-ui, sans-serif;
+    --mono:"Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--chalk);
+    color:var(--pitch);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- top bar (matches index.html) ---------- */
+  header{border-bottom:1px solid var(--line); background:var(--chalk);}
+  .bar{display:flex; align-items:center; justify-content:space-between; padding:18px 0;}
+  .wordmark img{width:150px; height:auto; display:block;}
+  .bar-cta{
+    font-family:var(--display);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:16px;
+    text-decoration:none;
+    border:2px solid var(--pitch);
+    padding:8px 18px;
+    border-radius:999px;
+    transition:background .15s, color .15s;
+  }
+  .bar-cta:hover, .bar-cta:focus-visible{background:var(--pitch); color:var(--chalk);}
+
+  /* ---------- document ---------- */
+  .doc{max-width:680px; padding:64px 24px 88px;}
+  .kicker{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    margin-bottom:12px;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(38px,5.5vw,56px);
+    line-height:.98;
+    margin-bottom:18px;
+  }
+  .lede{font-size:19px; color:var(--pitch-soft); margin-bottom:14px;}
+  .updated{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--pitch-soft);
+    padding-bottom:34px;
+    border-bottom:1px solid var(--line);
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:26px;
+    letter-spacing:.02em;
+    margin:44px 0 14px;
+  }
+  h3{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--grass-deep);
+    margin:26px 0 8px;
+  }
+  .doc p{margin-bottom:16px;}
+  .doc ul{margin:0 0 16px 0; padding-left:0; list-style:none;}
+  .doc li{
+    position:relative;
+    padding-left:22px;
+    margin-bottom:9px;
+  }
+  .doc li::before{
+    content:"";
+    position:absolute;
+    left:2px; top:11px;
+    width:7px; height:2px;
+    background:var(--grass);
+  }
+  .doc strong{font-weight:600;}
+  .doc a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line);}
+  .doc a:hover{text-decoration-color:var(--pitch);}
+  .doc a:focus-visible{outline:3px solid #FFCF3F; outline-offset:3px; border-radius:2px;}
+  .callout{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-left:4px solid var(--grass);
+    border-radius:10px;
+    padding:20px 22px;
+    margin:24px 0;
+  }
+  .callout p:last-child{margin-bottom:0;}
+  .doc table{
+    width:100%;
+    border-collapse:collapse;
+    margin:0 0 16px;
+    font-size:16px;
+  }
+  .doc th, .doc td{
+    text-align:left;
+    vertical-align:top;
+    padding:11px 14px 11px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .doc th{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    font-weight:400;
+  }
+  .doc td:first-child{width:38%; font-weight:600;}
+
+  /* ---------- footer (matches index.html) ---------- */
+  footer{border-top:1px solid var(--line); padding:26px 0;}
+  .foot{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px 20px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--pitch-soft);
+  }
+  .foot-brand{display:inline-flex; align-items:center; gap:9px;}
+  .foot-brand img{width:18px; height:18px; border-radius:3px; display:block;}
+  .foot-legal{display:inline-flex; align-items:center; gap:18px;}
+  .foot-legal a{text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--line);}
+  .foot-legal a:hover{color:var(--pitch); text-decoration-color:var(--pitch);}
+
+  @media (max-width:880px){
+    .wordmark img{width:126px;}
+    .doc{padding:44px 24px 64px;}
+    .doc td:first-child{width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="wordmark" href="index.html">
+      <img src="assets/eversport-logo-light.png" alt="Eversport" width="1628" height="588">
+    </a>
+    <a class="bar-cta" href="index.html#signup">Get on the list</a>
+  </div>
+</header>
+
+<main class="wrap doc">
+  <div class="kicker">Legal</div>
+  <h1>Privacy</h1>
+  <p class="lede">Eversport is a text message that tells you whether a pickup game is on. We collect what we need to run that, and nothing we'd be embarrassed to explain.</p>
+  <p class="updated">Last updated: August 2, 2026</p>
+
+  <h2>The short version</h2>
+  <div class="callout">
+    <p>We collect your email, and — only if you choose to give it — your mobile number and answers about how your pickup game runs. We use it to invite you to the beta and to decide which cities to open first. We don't sell it, and we don't share it with advertisers. Email us and we'll delete it.</p>
+  </div>
+
+  <h2>What we collect</h2>
+
+  <h3>Information you give us</h3>
+  <table>
+    <thead>
+      <tr><th>What</th><th>When</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Email address</td>
+        <td>When you sign up for the beta list. This is the only required field on the site.</td>
+      </tr>
+      <tr>
+        <td>Mobile number</td>
+        <td>Optional, in the survey after signup. See <a href="#texts">Text messages</a> below.</td>
+      </tr>
+      <tr>
+        <td>Answers about your game</td>
+        <td>Optional, in the same survey: your city, sport, whether the game already exists, who organizes it, how often you play, how many people are on your list, how many you need to play, where you play, your usual day and time, how often games fall apart, what you use to coordinate today, whether you'd take a call, and anything you type in the notes box.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Information collected automatically</h3>
+  <p>Like most websites, we use analytics to understand how people find and use the page. Through our analytics provider we receive:</p>
+  <ul>
+    <li>Pages you viewed and when</li>
+    <li>Browser, operating system, device type and screen size</li>
+    <li>Approximate location (city or region), derived from your IP address</li>
+    <li>The page or link that referred you here</li>
+    <li>Which parts of the signup flow you completed or abandoned</li>
+  </ul>
+  <p>Our analytics provider stores an identifier in your browser's <strong>local storage</strong> so return visits are recognized as the same person. We don't use advertising cookies, and we don't run ad-network trackers or pixels on this site.</p>
+
+  <h2>Why we collect it</h2>
+  <ul>
+    <li><strong>To invite you to the beta.</strong> That's what the email list is for.</li>
+    <li><strong>To decide which cities open first.</strong> We open by city as enough crews sign up in one place, which is why we ask where you play.</li>
+    <li><strong>To build the right product.</strong> Knowing how big your crew is, how often you play, and what keeps killing your games tells us what to build and in what order.</li>
+    <li><strong>To measure the site.</strong> Which pages work, where people drop off, whether the signup flow is broken.</li>
+  </ul>
+
+  <h2 id="texts">Text messages</h2>
+  <p>The mobile number field is optional and the survey works fine without it. If you do give us a number:</p>
+  <ul>
+    <li>We'll text you about your beta invite and getting your crew set up. That's it.</li>
+    <li>Reply <strong>STOP</strong> to any message and we'll stop texting you.</li>
+    <li>Message and data rates may apply, depending on your carrier and plan.</li>
+    <li>We will not sell your number, and we will not use it for marketing unrelated to Eversport.</li>
+  </ul>
+
+  <h2>Who we share it with</h2>
+  <p>We don't sell your personal information, and we don't share it with advertisers or data brokers. We do use a small number of service providers to run the site:</p>
+  <table>
+    <tbody>
+      <tr>
+        <td>Mixpanel</td>
+        <td>Product analytics. Receives your email address, your survey answers, your mobile number if you gave one, and the automatic information listed above. Data is processed and stored in the United States. See <a href="https://mixpanel.com/legal/privacy-policy/" rel="noopener">Mixpanel's privacy policy</a>.</td>
+      </tr>
+      <tr>
+        <td>Google Fonts</td>
+        <td>The typefaces on this site load from Google's servers, so Google receives your IP address and browser details as part of that request. No account information is shared. See <a href="https://policies.google.com/privacy" rel="noopener">Google's privacy policy</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>We may also disclose information if we're legally required to, or to protect our rights or someone's safety. If Eversport is ever acquired or merged, information would transfer as part of that — we'd tell you before it changed hands.</p>
+
+  <h2>Where your data lives</h2>
+  <p>Eversport is operated from the United States, and our service providers store data in the United States. If you're outside the US, submitting information here means it's transferred to and processed in the US, where privacy laws differ from those where you live.</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep your information for as long as you're on the beta list, or until you ask us to delete it. If the beta program ends and we don't launch, we delete the list. Analytics records are retained on a rolling basis by our analytics provider.</p>
+
+  <h2>Your choices</h2>
+  <ul>
+    <li><strong>See what we have.</strong> Email us and we'll send you your record.</li>
+    <li><strong>Correct it.</strong> Email us with what's wrong.</li>
+    <li><strong>Delete it.</strong> Email us and we'll remove you from the list and delete your survey answers and phone number.</li>
+    <li><strong>Stop the texts.</strong> Reply STOP to any message, or email us.</li>
+    <li><strong>Stop the emails.</strong> Use the unsubscribe link in any email we send, or email us.</li>
+  </ul>
+  <p>If you're in California, the EU, or the UK, you have additional rights over your personal data — including access, correction, deletion, portability, and the right to object to processing. We honor these requests from everyone, wherever you live. Write to <a href="mailto:[YOUR CONTACT EMAIL]">[YOUR CONTACT EMAIL]</a> and we'll respond within 30 days.</p>
+  <p>You can also block analytics entirely with a tracker-blocking browser extension, or by turning on Do Not Track. The site works the same either way.</p>
+
+  <h2>Children</h2>
+  <p>Eversport isn't directed at children under 13, and we don't knowingly collect information from them. If you believe a child has given us information, email us and we'll delete it.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we change how we handle your information, we'll update this page and change the date at the top. If the change is significant — a new category of data, a new provider receiving it — we'll email the people on the list.</p>
+
+  <h2>Contact</h2>
+  <p>Questions, requests, or complaints about privacy go to <a href="mailto:[YOUR CONTACT EMAIL]">[YOUR CONTACT EMAIL]</a>.</p>
+  <p>[YOUR LEGAL ENTITY]<br>[YOUR MAILING ADDRESS]</p>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="foot-brand">
+      <img src="assets/eversport-mark-green.svg" alt="" aria-hidden="true" width="18" height="18">
+      EVERSPORT.COM
+    </span>
+    <span class="foot-legal">
+      <a href="index.html">Home</a>
+      <span>© 2026 Eversport</span>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
