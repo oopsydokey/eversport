@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eversport — Pickup soccer that actually happens</title>
+<meta name="description" content="One text on Friday. Reply IN or OUT. GAME ON by lunch. Pickup soccer coordination with no app, no accounts, no group-chat chaos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Mixpanel -->
+<script type="text/javascript">
+(function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="init push disable track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking".split(" ");b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persistence: "localStorage"});
+</script>
+<style>
+  :root{
+    --chalk:#F7F6F1;
+    --line:#DFDBCD;
+    --pitch:#10371F;
+    --pitch-soft:#3D5A47;
+    --grass:#1E9E50;
+    --grass-deep:#157A3C;
+    --card-yellow:#FFCF3F;
+    --bubble-in:#E9E7DE;
+    --bubble-out:#1E9E50;
+    --white:#FFFFFF;
+    --red:#D64545;
+    --display:"Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+    --body:"Barlow", ui-sans-serif, system-ui, sans-serif;
+    --mono:"Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--chalk);
+    color:var(--pitch);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- top bar ---------- */
+  header{
+    border-bottom:1px solid var(--line);
+    background:var(--chalk);
+  }
+  .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .wordmark{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:28px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    display:flex; align-items:center; gap:12px;
+  }
+  .beta-card{
+    display:inline-block;
+    background:var(--card-yellow);
+    color:var(--pitch);
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.12em;
+    padding:4px 8px 3px;
+    transform:rotate(-4deg);
+    border-radius:2px;
+    box-shadow:1px 2px 0 rgba(16,55,31,.25);
+  }
+  .bar-cta{
+    font-family:var(--display);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:16px;
+    text-decoration:none;
+    border:2px solid var(--pitch);
+    padding:8px 18px;
+    border-radius:999px;
+    transition:background .15s, color .15s;
+  }
+  .bar-cta:hover, .bar-cta:focus-visible{background:var(--pitch); color:var(--chalk);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding:72px 0 88px;
+  }
+  /* chalk center circle */
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-340px; right:-260px;
+    width:820px; height:820px;
+    border:2px solid var(--line);
+    border-radius:50%;
+    pointer-events:none;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    top:88px; right:150px;
+    width:8px; height:8px;
+    background:var(--line);
+    border-radius:50%;
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(46px, 6.2vw, 72px);
+    line-height:.95;
+    letter-spacing:.01em;
+    margin-bottom:22px;
+  }
+  h1 .on{color:var(--grass);}
+  .sub{
+    font-size:19px;
+    max-width:46ch;
+    color:var(--pitch-soft);
+    margin-bottom:34px;
+  }
+  .sub strong{color:var(--pitch); font-weight:600;}
+
+  /* email form */
+  .signup{
+    display:flex; gap:10px; max-width:460px;
+  }
+  .signup input[type=email]{
+    flex:1;
+    font-family:var(--body);
+    font-size:16px;
+    padding:14px 16px;
+    border:2px solid var(--pitch);
+    border-radius:10px;
+    background:var(--white);
+    color:var(--pitch);
+    min-width:0;
+  }
+  .signup input[type=email]::placeholder{color:#8B917F;}
+  .signup input[type=email]:focus-visible{outline:3px solid var(--card-yellow); outline-offset:1px;}
+  .signup button{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-size:17px;
+    padding:14px 24px;
+    background:var(--grass);
+    color:var(--white);
+    border:2px solid var(--grass-deep);
+    border-radius:10px;
+    cursor:pointer;
+    transition:transform .1s, background .15s;
+    white-space:nowrap;
+  }
+  .signup button:hover{background:var(--grass-deep);}
+  .signup button:active{transform:translateY(1px);}
+  .signup button:focus-visible{outline:3px solid var(--card-yellow); outline-offset:2px;}
+  .form-note{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--pitch-soft);
+    margin-top:12px;
+    letter-spacing:.02em;
+  }
+  .confirm{
+    display:none;
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-size:20px;
+    color:var(--grass-deep);
+    padding:14px 0;
+  }
+
+  /* ---------- phone / SMS thread ---------- */
+  .phone{
+    background:var(--white);
+    border:2px solid var(--pitch);
+    border-radius:28px;
+    padding:20px 16px 24px;
+    box-shadow:6px 8px 0 rgba(16,55,31,.12);
+    max-width:390px;
+    margin-left:auto;
+    position:relative;
+  }
+  .phone-head{
+    text-align:center;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+    margin-bottom:14px;
+  }
+  .thread{display:flex; flex-direction:column; gap:8px; min-height:360px;}
+  .msg{
+    max-width:82%;
+    padding:9px 13px;
+    border-radius:16px;
+    font-size:14.5px;
+    line-height:1.4;
+    opacity:0;
+    transform:translateY(8px);
+    animation:pop .35s ease-out forwards;
+  }
+  .msg.in{
+    background:var(--bubble-in);
+    align-self:flex-start;
+    border-bottom-left-radius:4px;
+  }
+  .msg.out{
+    background:var(--bubble-out);
+    color:var(--white);
+    align-self:flex-end;
+    border-bottom-right-radius:4px;
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:.04em;
+  }
+  .msg .who{
+    display:block;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    opacity:.65;
+    margin-bottom:2px;
+  }
+  .tally{
+    align-self:center;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    color:var(--pitch-soft);
+    padding:6px 0 2px;
+    opacity:0;
+    animation:pop .35s ease-out forwards;
+  }
+  .stamp{
+    align-self:center;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:34px;
+    letter-spacing:.08em;
+    color:var(--grass);
+    border:3px solid var(--grass);
+    border-radius:8px;
+    padding:4px 18px 2px;
+    transform:rotate(-5deg) scale(.6);
+    opacity:0;
+    animation:stamp .4s cubic-bezier(.2,1.4,.4,1) forwards;
+    margin-top:6px;
+  }
+  @keyframes pop{to{opacity:1; transform:translateY(0);}}
+  @keyframes stamp{to{opacity:1; transform:rotate(-5deg) scale(1);}}
+
+  /* animation schedule */
+  .d1{animation-delay:.4s;} .d2{animation-delay:1.1s;} .d3{animation-delay:1.7s;}
+  .d4{animation-delay:2.3s;} .d5{animation-delay:2.9s;} .d6{animation-delay:3.5s;}
+  .d7{animation-delay:4.2s;} .d8{animation-delay:4.9s;}
+
+  @media (prefers-reduced-motion: reduce){
+    .msg,.tally,.stamp{animation:none; opacity:1; transform:none;}
+    .stamp{transform:rotate(-5deg);}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- proof strip ---------- */
+  .proof{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--white);
+  }
+  .proof-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    text-align:center;
+  }
+  .proof-item{padding:30px 16px;}
+  .proof-item + .proof-item{border-left:1px solid var(--line);}
+  .proof-num{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:42px;
+    line-height:1;
+  }
+  .proof-label{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    margin-top:6px;
+  }
+
+  /* ---------- how it works ---------- */
+  .how{padding:88px 0;}
+  .kicker{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--pitch-soft);
+    margin-bottom:12px;
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(32px,4vw,44px);
+    line-height:1;
+    margin-bottom:44px;
+  }
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .step{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:28px 26px 30px;
+    position:relative;
+  }
+  .step-num{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.1em;
+    color:var(--grass-deep);
+    margin-bottom:14px;
+  }
+  .step h3{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:24px;
+    letter-spacing:.02em;
+    margin-bottom:10px;
+  }
+  .step p{color:var(--pitch-soft); font-size:16px;}
+  .step p code{
+    font-family:var(--mono);
+    font-size:13.5px;
+    background:var(--bubble-in);
+    padding:1px 6px;
+    border-radius:5px;
+    color:var(--pitch);
+  }
+
+  /* ---------- why ---------- */
+  .why{
+    background:var(--pitch);
+    color:var(--chalk);
+    padding:80px 0;
+  }
+  .why h2{color:var(--chalk);}
+  .why .kicker{color:#9DB3A4;}
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:36px;
+  }
+  .why-item h3{
+    font-family:var(--display);
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:22px;
+    margin-bottom:8px;
+    color:var(--card-yellow);
+  }
+  .why-item p{color:#C4D2C9; font-size:16px;}
+
+  /* ---------- bottom CTA ---------- */
+  .cta-final{padding:96px 0 104px; text-align:center;}
+  .cta-final h2{margin-bottom:14px;}
+  .cta-final .sub{margin:0 auto 34px;}
+  .cta-final .signup{margin:0 auto;}
+  .cta-final .confirm{justify-content:center;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0;
+  }
+  .foot{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--pitch-soft);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:880px){
+    .hero{padding:48px 0 64px;}
+    .hero-grid{grid-template-columns:1fr; gap:44px;}
+    .phone{margin:0 auto;}
+    .steps{grid-template-columns:1fr;}
+    .why-grid{grid-template-columns:1fr; gap:28px;}
+    .proof-grid{grid-template-columns:1fr;}
+    .proof-item + .proof-item{border-left:none; border-top:1px solid var(--line);}
+    .signup{flex-direction:column;}
+    .signup button{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="wordmark">Eversport <span class="beta-card">BETA</span></div>
+    <a class="bar-cta" href="#signup">Get on the list</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Friday · 7:02 AM</div>
+      <h1>Pickup soccer that actually happens. <span class="on">Game on.</span></h1>
+      <p class="sub">One text on Friday. Reply <strong>IN</strong> or <strong>OUT</strong>. If enough players are in by the deadline, it's <strong>GAME ON</strong> — everyone knows by lunch. That's the whole app. <strong>There is no app.</strong></p>
+
+      <form class="signup" id="signup" action="#" method="POST" novalidate>
+        <!-- TODO: point action at your form endpoint (Formspree, Buttondown, etc.) -->
+        <label for="email" style="position:absolute;left:-9999px;">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <button type="submit">Get on the list</button>
+      </form>
+      <p class="confirm" id="confirm">✓ You're on the team sheet.</p>
+      <p class="form-note">Beta invites go out by city as crews fill in. No spam, ever.</p>
+    </div>
+
+    <div class="phone" aria-label="Example of a game-day text thread">
+      <div class="phone-head">Eversport · Text thread</div>
+      <div class="thread">
+        <div class="msg in d1"><span class="who">Eversport</span>⚽ Saturday 9am at Crockett Park. Reply IN, IN +guests, or OUT. Deadline: Fri 6pm.</div>
+        <div class="msg out d2">IN</div>
+        <div class="msg out d3">IN +1</div>
+        <div class="msg out d4">OUT 😞</div>
+        <div class="msg out d5">IN</div>
+        <div class="tally d6">TALLY — 11 IN · NEED 10</div>
+        <div class="msg in d7"><span class="who">Eversport</span>Deadline hit. We have the numbers.</div>
+        <div class="stamp d8">GAME ON</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap proof-grid">
+    <div class="proof-item">
+      <div class="proof-num">3 yrs</div>
+      <div class="proof-label">Running every week</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">1 text</div>
+      <div class="proof-label">Per week, that's it</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">0</div>
+      <div class="proof-label">Apps to download</div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="kicker">How it works</div>
+    <h2>Three steps. Zero downloads.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">STEP 01</div>
+        <h3>Subscribe by text</h3>
+        <p>Text <code>JOIN</code> once and you're on the roster. No app, no account, no password to forget.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">STEP 02</div>
+        <h3>Get the Friday invite</h3>
+        <p>The game announcement lands in your texts. Reply <code>IN</code>, <code>IN +1</code>, or <code>OUT</code>. Ten seconds, done.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">STEP 03</div>
+        <h3>Get the verdict</h3>
+        <p>Replies tally until the deadline. Enough players? <strong>GAME ON.</strong> Short? <strong>GAME OFF</strong> — nobody drives to an empty field.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <div class="kicker">Why texts win</div>
+    <h2>Built for people who just want to play.</h2>
+    <div class="why-grid">
+      <div class="why-item">
+        <h3>No group-chat chaos</h3>
+        <p>The question never gets buried under 40 memes. One announcement, one deadline, one answer.</p>
+      </div>
+      <div class="why-item">
+        <h3>No app graveyard</h3>
+        <p>Every pickup app dies on the download screen. A text message has a 98% open rate and zero onboarding.</p>
+      </div>
+      <div class="why-item">
+        <h3>No ghost games</h3>
+        <p>The tally is honest. If the numbers aren't there by deadline, it's called off before anyone laces up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <div class="kicker">Beta</div>
+    <h2>One crew has run on this for three years.<br>Yours is next.</h2>
+    <p class="sub">Drop your email and we'll ping you when Eversport opens up for your crew.</p>
+    <form class="signup" id="signup2" action="#" method="POST" novalidate>
+      <label for="email2" style="position:absolute;left:-9999px;">Email address</label>
+      <input type="email" id="email2" name="email" placeholder="you@example.com" required>
+      <button type="submit">Get on the list</button>
+    </form>
+    <p class="confirm" id="confirm2">✓ You're on the team sheet.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>EVERSPORT.COM</span>
+    <span>© 2026 Eversport</span>
+  </div>
+</footer>
+
+<script>
+  // Lightweight form handling.
+  // TODO: Replace with a real endpoint (Formspree / Buttondown / ConvertKit).
+  // Example: set form action="https://formspree.io/f/YOUR_ID" method="POST"
+  // and remove the preventDefault below to let it submit natively.
+  function track(event, props){
+    try{ if(window.mixpanel && mixpanel.track){ mixpanel.track(event, props || {}); } }catch(err){}
+  }
+
+  function wireForm(formId, confirmId, location){
+    var form = document.getElementById(formId);
+    var confirm = document.getElementById(confirmId);
+    if(!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = form.querySelector('input[type=email]');
+      if(!email.value || !email.checkValidity()){
+        email.focus();
+        track('Email Submit Failed', {form_location: location, reason: 'invalid_email'});
+        return;
+      }
+      // Identify the person and store the email on their Mixpanel profile
+      try{
+        mixpanel.identify(email.value.toLowerCase().trim());
+        mixpanel.people.set({ '$email': email.value.toLowerCase().trim(), 'signup_source': 'eversport-landing' });
+      }catch(err){}
+      track('Beta Signup Completed', {form_location: location});
+      form.style.display = 'none';
+      confirm.style.display = 'block';
+    });
+  }
+  wireForm('signup','confirm','hero');
+  wireForm('signup2','confirm2','footer');
+
+  // Track the nav CTA click (scroll to form)
+  var navCta = document.querySelector('.bar-cta');
+  if(navCta){
+    navCta.addEventListener('click', function(){
+      track('Nav CTA Clicked', {target: 'signup_form'});
+    });
+  }
+
+  // Track when the GAME ON stamp has landed (hero animation completed = full demo watched)
+  var stampTimer = setTimeout(function(){
+    track('Hero Demo Completed');
+  }, 5400);
+</script>
+
+</body>
+</html>
