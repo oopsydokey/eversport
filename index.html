@@ -940,6 +940,18 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
   var surveyThanks = document.getElementById('survey-thanks');
   var surveyLocation = null;
   var surveyStarted = false;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Put a block near the top of the viewport. scrollIntoView({block:'nearest'}) is
+  // not enough: it does nothing once an element's top edge is on screen, which left
+  // the survey card sitting almost entirely below the fold when it opened.
+  function scrollBlockToTop(el, offset, smooth){
+    var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: (smooth && !reduceMotion.matches) ? 'smooth' : 'auto'
+    });
+  }
 
   function openSurvey(afterEl, location){
     if(!surveyBlock || !surveyForm) return;
@@ -956,10 +968,10 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
     track('Lead Survey Shown', {form_location: location});
 
     var heading = document.getElementById('survey-heading');
-    if(heading){
-      heading.focus({preventScroll: true});
-      heading.scrollIntoView({block: 'nearest'});
-    }
+    if(heading) heading.focus({preventScroll: true});
+    // Frame the confirmation and the top of the card together, so the survey
+    // arrives as something presented rather than something that appeared offscreen.
+    scrollBlockToTop(afterEl, 80, true);
   }
 
   function closeSurvey(showThanks){
@@ -967,6 +979,10 @@ mixpanel.init("2ebd8479ded7a66b8de730173dd6e12d", {track_pageview: true, persist
     if(showThanks) surveyThanks.style.display = 'block';
     var heroGrid = surveyBlock.closest('.hero-grid');
     if(heroGrid) heroGrid.classList.remove('survey-open');
+    // Collapsing the card shortens the document, and the browser clamps the scroll
+    // position wherever it lands — that threw the reader ~1300px and left the
+    // confirmation above the viewport. Anchor it deliberately, in one movement.
+    scrollBlockToTop(surveyBlock, 180, false);
   }
 
   if(surveyForm){
